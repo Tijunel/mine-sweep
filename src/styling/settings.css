@@ -1,0 +1,40 @@
+/* Desktop */
+
+#settings {
+    background-color: white;
+    padding: 10px;
+}
+    
+#settings .col {
+    padding: 5px;
+}
+
+#settings button {
+    color: white;
+    background-color: #4FB3F7;
+    border: 0px;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 27px;
+    height: 44px;
+    width: 100%;
+    opacity: 0.65;
+}
+
+#settings button:disabled {
+    background: #4FB3F7 !important;
+    opacity: 1;
+}
+
+#settings button div {
+    margin-top: -10px;
+    height: 44px;
+}
+
+#start {
+    margin-top: 10px;
+}
+
+#settings #start button {
+    opacity: 1;
+}
