@@ -1,11 +1,11 @@
 import React from 'react';
-import PlayArea from './playArea';
+import TileArea from './tileArea';
 
 export default class Game extends React.Component {
     render = () => {
         return (
             <div id="game">
-                <PlayArea difficulty={this.props.difficulty}/>
+                <TileArea difficulty={this.props.difficulty}/>
             </div>  
         );
     }

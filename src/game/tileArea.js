@@ -14,40 +14,49 @@ export default class TileArea extends React.Component {
         this.generateTiles();
     }
 
-    componentDidUpdate = (prevProps) => {   
-        if(prevProps !== this.props) {
+    componentDidUpdate = (prevProps) => {
+        if (prevProps !== this.props) {
             this.tiles = [];
             this.info = [];
             this.generateTiles();
-        } 
+        }
     }
 
     generateTiles = () => {
         let cols = (this.props.difficulty) ? 10 : 30;
-        for(var i = 0; i < cols; i++) {
+        for (var i = 0; i < cols; i++) {
             this.tiles[i] = [];
-            for(var j = 0; j < cols; j++) {
+            for (var j = 0; j < cols; j++) {
+                var colour = '#0476C2';
+                if(((i + 10) + j) % 2 == 0) colour = '#265575';
                 this.tiles[i].push(
-                    <Col key={(i*10)+j} style={{padding: 0, margin: 0}}>
-                        <Tile/>
+                    <Col key={(i * 10) + j} style={{ padding: 0, margin: 0 }}>
+                        <Tile row={i} col={j} colour={colour}/>
                     </Col>
                 );
             }
         }
-        for(i = 0; i < cols; i++) {
+        for (i = 0; i < cols; i++) {
             this.info.push(
-                <Row key={(i*10)} style={{width: '100%', margin: 'auto'}}>
+                <Row key={(i * 10)} style={{ width: '100%', margin: 'auto' }}>
                     {this.tiles[i]}
                 </Row>
             );
         }
+        this.forceUpdate();
     }
 
     render = () => {
         return (
-            <div id='tile-area'>
+            <div id="play-area">
                 <Container>
-                {this.info}
+                    <div id="game-border" ref={this.widthRef}>
+                        <div id='tile-area'>
+                            <Container>
+                                {this.info}
+                            </Container>
+                        </div>
+                    </div>
                 </Container>
             </div>
         );
