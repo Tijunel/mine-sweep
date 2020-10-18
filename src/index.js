@@ -17,7 +17,7 @@ class App extends React.Component {
 	}
 
 	updateDifficulty = (state) => {
-		this.setState({ easy: state });
+		this.setState({ easy: !state });
 	}
 
 	render = () => {

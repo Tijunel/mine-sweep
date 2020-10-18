@@ -6,7 +6,7 @@ export default class TopNavigation extends React.Component {
         return (
             <div id="top-nav">
                 <div id="top-nav-title">
-                    <b>Mine Sweeper</b>
+                    <b>Minesweeper (Blue Edition)</b>
                 </div>
             </div>
         )

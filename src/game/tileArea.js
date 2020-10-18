@@ -23,15 +23,14 @@ export default class TileArea extends React.Component {
     }
 
     generateTiles = () => {
-        let cols = (this.props.difficulty) ? 10 : 30;
+        let cols = (this.props.difficulty) ? 10 : 15;
         for (var i = 0; i < cols; i++) {
             this.tiles[i] = [];
             for (var j = 0; j < cols; j++) {
-                var colour = '#0476C2';
-                if(((i + 10) + j) % 2 == 0) colour = '#265575';
+                var colour = (((i + 10) + j) % 2 === 0) ? '#0494F5' : '#0476C2';
                 this.tiles[i].push(
                     <Col key={(i * 10) + j} style={{ padding: 0, margin: 0 }}>
-                        <Tile row={i} col={j} colour={colour}/>
+                        <Tile row={i} col={j} colour={colour} />
                     </Col>
                 );
             }
@@ -48,16 +47,12 @@ export default class TileArea extends React.Component {
 
     render = () => {
         return (
-            <div id="play-area">
-                <Container>
-                    <div id="game-border" ref={this.widthRef}>
-                        <div id='tile-area'>
-                            <Container>
-                                {this.info}
-                            </Container>
-                        </div>
-                    </div>
-                </Container>
+            <div id="game-border">
+                <div id='tile-area'>
+                    <Container>
+                        {this.info}
+                    </Container>
+                </div>
             </div>
         );
     }
