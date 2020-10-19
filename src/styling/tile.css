@@ -1,4 +1,6 @@
 #tile {
     margin: 1px;
     border-radius: 10px;
+    align-items: center;
+    display: flex;
 }

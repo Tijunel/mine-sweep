@@ -33,7 +33,7 @@ export default class GameEngine {
 
     setGameMode(easy) {
         if (easy) this.init(10, 10, 10);
-        else this.init(20, 20, 50);
+        else this.init(15, 15, 25);
     }
 
     getMineCount() {
