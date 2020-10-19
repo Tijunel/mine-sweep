@@ -15,14 +15,22 @@ export default class Settings extends React.Component {
 
     toggleMode = () => {
         this.setState({
-            easy: !this.state.easy
-        }, this.props.updateDifficulty(!this.state.easy));
+            easy: !this.state.easy,
+            started: false
+        },
+            this.state.engine.setGameMode(!this.state.easy),
+            this.props.updateDifficulty(!this.state.easy),
+            this.props.updateStarted(!this.state.started)
+        );
     }
 
     toggleStart = () => {
         this.setState({
             started: !this.state.started
-        }, this.props.updateStarted(!this.state.started), this.state.engine.setGameMode(this.state.easy));
+        },
+            this.state.engine.setGameMode(this.state.easy),
+            this.props.updateStarted(!this.state.started)
+        );
     }
 
     render = () => {

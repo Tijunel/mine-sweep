@@ -21,8 +21,8 @@ export default class Tile extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         if(prevProps !== this.props) {
-            this.setState({ count: this.props.count, uncovered: this.props.uncovered, colour: this.props.colour});
-            this.setState({ fontSize: 0.25 * this.tileRef.current.offsetWidth});
+            this.setState({ count: this.props.count, uncovered: this.props.uncovered, colour: this.props.colour, fontSize: 0.25 * this.tileRef.current.offsetWidth});
+            this.handleResize();
         }
     }
 
