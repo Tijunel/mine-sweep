@@ -23,7 +23,12 @@ export default class Tile extends React.Component {
 
     componentDidUpdate = (prevProps) => {
         if(prevProps !== this.props) {
-            this.setState({ count: this.props.count, uncovered: this.props.uncovered, colour: this.props.colour, fontSize: 0.25 * this.tileRef.current.offsetWidth});
+            this.setState({ 
+                count: this.props.count, 
+                uncovered: this.props.uncovered, 
+                colour: this.props.colour, 
+                fontSize: 0.25 * this.tileRef.current.offsetWidth
+            });
             this.handleResize();
         }
     }
@@ -41,7 +46,7 @@ export default class Tile extends React.Component {
     }
 
     handleRightClick = (e) => {
-        if(!this.props.started && this.state.touchTime > Number.MAX_VALUE) return;
+        if(!this.props.started || this.state.touchTime > Number.MAX_VALUE) return;
         e.preventDefault();
         this.props.markTile(this.props.row, this.props.col);
     }
@@ -53,7 +58,7 @@ export default class Tile extends React.Component {
         }, 10);
     }
 
-    handleTouchEnd = (e) => {
+    handleTouchEnd = () => {
         if(!this.props.started && this.state.touchTime > 0) return;
         if(this.state.touchTime > 990) this.props.markTile(this.props.row, this.props.col);
         clearInterval(this.timer);
@@ -62,9 +67,9 @@ export default class Tile extends React.Component {
 
     render = () => {
         return (
-            <div id="tile" style={{ backgroundColor: this.state.colour, height: this.state.height}} onClick={this.handleClick} onContextMenu={this.handleRightClick} onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd} ref={this.tileRef}>
+            <div id="tile" style={{ backgroundColor: this.state.colour, height: this.state.height, cursor: ((this.state.uncovered)?"":"pointer")}} onClick={this.handleClick} onContextMenu={this.handleRightClick} onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd} ref={this.tileRef}>
                 <div style={{fontSize: this.state.fontSize, margin: "auto"}}>
-                    {(this.state.uncovered) ? (this.state.count === "0") ? "" : this.state.count : ""}
+                    {(this.state.uncovered) ? (this.state.count === "0" || this.state.count === "M") ? "" : this.state.count : ""}
                 </div>
             </div>
         );

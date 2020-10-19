@@ -36,10 +36,6 @@ export default class GameEngine {
         else this.init(15, 15, 25);
     }
 
-    getMineCount() {
-        return this.nmines;
-    }
-
     validCoord(row, col) {
         return row >= 0 && row < this.nrows && col >= 0 && col < this.ncols;
     }
@@ -58,8 +54,7 @@ export default class GameEngine {
     }
 
     count(row, col) {
-        const c = (r, c) =>
-            (this.validCoord(r, c) && this.arr[r][c].mine ? 1 : 0);
+        const c = (r, c) => (this.validCoord(r, c) && this.arr[r][c].mine ? 1 : 0);
         let res = 0;
         for (let dr = -1; dr <= 1; dr++)
             for (let dc = -1; dc <= 1; dc++)
@@ -69,12 +64,10 @@ export default class GameEngine {
 
     sprinkleMines(row, col) {
         let allowed = [];
-        for (let r = 0; r < this.nrows; r++) {
-            for (let c = 0; c < this.ncols; c++) {
+        for (let r = 0; r < this.nrows; r++) 
+            for (let c = 0; c < this.ncols; c++) 
                 if (Math.abs(row - r) > 2 || Math.abs(col - c) > 2)
                     allowed.push([r, c]);
-            }
-        }
         this.nmines = Math.min(this.nmines, allowed.length);
         for (let i = 0; i < this.nmines; i++) {
             let j = rndInt(i, allowed.length - 1);
@@ -84,21 +77,18 @@ export default class GameEngine {
         }
         for (let r = 0; r < this.nrows; r++) {
             for (let c = 0; c < this.ncols; c++) {
-                if (this.arr[r][c].state === STATE_MARKED)
-                    this.arr[r][c].state = STATE_HIDDEN;
+                if (this.arr[r][c].state === STATE_MARKED) this.arr[r][c].state = STATE_HIDDEN;
                 this.arr[r][c].count = this.count(r, c);
             }
         }
         let mines = []; 
         for (let row = 0; row < this.nrows; row++) {
             let s = "";
-            for (let col = 0; col < this.ncols; col++) {
+            for (let col = 0; col < this.ncols; col++) 
                 s += this.arr[row][col].mine ? "B" : ".";
-            }
             s += "  |  ";
-            for (let col = 0; col < this.ncols; col++) {
+            for (let col = 0; col < this.ncols; col++) 
                 s += this.arr[row][col].count.toString();
-            }
             mines[row] = s;
         }
     }
@@ -148,8 +138,7 @@ export default class GameEngine {
     }
 
     getStatus() {
-        let done = this.exploded ||
-            this.nuncovered === this.nrows * this.ncols - this.nmines;
+        let done = this.exploded || this.nuncovered === this.nrows * this.ncols - this.nmines;
         return {
             done: done,
             exploded: this.exploded,

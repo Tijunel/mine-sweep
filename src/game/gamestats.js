@@ -23,21 +23,14 @@ export default class GameStats extends React.Component {
 
     startTimer = () => {
         this.timer = setInterval(() => {
-            this.setState({
-                time: this.state.time + 1
-            });
+            this.setState({ time: this.state.time + 1 });
         }, 1000);
-        this.setState({
-            mines: this.state.engine.getMineCount()
-        })
+        this.setState({ mines: this.state.engine.getStatus().nmines })
     }
 
     stopTimer = () => {
         clearInterval(this.timer);
-        this.setState({
-            time: 0,
-            mines: 0
-        });
+        this.setState({ time: 0, mines: 0 });
     }
 
     render = () => {
@@ -45,12 +38,8 @@ export default class GameStats extends React.Component {
             <div id="game-stats">
                 <Container>
                     <Row>
-                        <Col>
-                            <b>Time: {this.state.time}</b>
-                        </Col>
-                        <Col>
-                            <b>Mines: {this.state.mines}</b>
-                        </Col>
+                        <Col><b>Time: {this.state.time}</b></Col>
+                        <Col><b>Mines: {this.state.mines}</b></Col>
                     </Row>
                 </Container>
             </div>
