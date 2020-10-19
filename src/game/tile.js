@@ -10,7 +10,8 @@ export default class Tile extends React.Component {
             uncovered: this.props.uncovered,
             colour: this.props.colour,
             fontSize: 0,
-            height: 0
+            height: 0,
+            touchTime: 0
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -35,18 +36,33 @@ export default class Tile extends React.Component {
     }
 
     handleClick = () => {
-        if(!this.props.started) return;
+        if(!this.props.started || this.state.count === "F") return;
         this.props.uncoverTile(this.props.row, this.props.col);
     }
 
     handleRightClick = (e) => {
+        if(!this.props.started && this.state.touchTime > Number.MAX_VALUE) return;
         e.preventDefault();
         this.props.markTile(this.props.row, this.props.col);
     }
 
+    handleTouchStart = () => {
+        if(!this.props.started && this.state.touchTime === 0) return;
+        this.timer = setInterval(() => {
+            this.setState({ touchTime: this.state.touchTime + 10});
+        }, 10);
+    }
+
+    handleTouchEnd = (e) => {
+        if(!this.props.started && this.state.touchTime > 0) return;
+        if(this.state.touchTime > 990) this.props.markTile(this.props.row, this.props.col);
+        clearInterval(this.timer);
+        this.setState({ touchTime: 0 });
+    }
+
     render = () => {
         return (
-            <div id="tile" style={{ backgroundColor: this.state.colour, height: this.state.height}} onClick={this.handleClick} onContextMenu={this.handleRightClick} ref={this.tileRef}>
+            <div id="tile" style={{ backgroundColor: this.state.colour, height: this.state.height}} onClick={this.handleClick} onContextMenu={this.handleRightClick} onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd} ref={this.tileRef}>
                 <div style={{fontSize: this.state.fontSize, margin: "auto"}}>
                     {(this.state.uncovered) ? (this.state.count === "0") ? "" : this.state.count : ""}
                 </div>

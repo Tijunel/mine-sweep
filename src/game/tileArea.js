@@ -31,7 +31,6 @@ export default class TileArea extends React.Component {
     markTile = (row, col) => {
         this.state.engine.mark(row, col);
         this.generateTiles();
-        console.log("here")
     }
 
     generateTiles = () => {
