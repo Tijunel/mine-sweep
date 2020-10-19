@@ -28,6 +28,12 @@ export default class TileArea extends React.Component {
         this.generateTiles();
     }
 
+    markTile = (row, col) => {
+        this.state.engine.mark(row, col);
+        this.generateTiles();
+        console.log("here")
+    }
+
     generateTiles = () => {
         let rendering = this.state.engine.getRendering();
         let cols = (this.props.difficulty) ? 10 : 15;
@@ -38,6 +44,7 @@ export default class TileArea extends React.Component {
             for (var j = 0; j < cols; j++) {
                 var colour = (((i + 10) + j) % 2 === 0) ? '#0494F5' : '#0476C2';
                 if (rendering !== undefined && !isNaN(rendering[i][j])) colour = "#FFF";
+                if(rendering !== undefined && rendering[i][j] === "F") colour = "#800000";
                 tiles[i].push(
                     <Col key={(i * 10) + j} style={{ padding: 0, margin: 0 }}>
                         <Tile
@@ -46,8 +53,9 @@ export default class TileArea extends React.Component {
                             colour={colour}
                             started={this.props.started}
                             count={rendering[i][j]}
-                            uncovered={rendering[i][j] !== "H"}
+                            uncovered={rendering[i][j] !== "H" && rendering[i][j] !== "F"}
                             uncoverTile={this.uncoverTile}
+                            markTile={this.markTile}
                         />
                     </Col>
                 );

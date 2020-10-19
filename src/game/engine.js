@@ -84,12 +84,12 @@ export default class GameEngine {
         }
         for (let r = 0; r < this.nrows; r++) {
             for (let c = 0; c < this.ncols; c++) {
-                if (this.arr[r][c].state == STATE_MARKED)
+                if (this.arr[r][c].state === STATE_MARKED)
                     this.arr[r][c].state = STATE_HIDDEN;
                 this.arr[r][c].count = this.count(r, c);
             }
         }
-        let mines = []; let counts = [];
+        let mines = []; 
         for (let row = 0; row < this.nrows; row++) {
             let s = "";
             for (let col = 0; col < this.ncols; col++) {
@@ -125,8 +125,8 @@ export default class GameEngine {
     mark(row, col) {
         if (!this.validCoord(row, col)) return false;
         if (this.arr[row][col].state === STATE_SHOWN) return false;
-        this.nmarked += this.arr[row][col].state == STATE_MARKED ? -1 : 1;
-        this.arr[row][col].state = this.arr[row][col].state == STATE_MARKED ? STATE_HIDDEN : STATE_MARKED;
+        this.nmarked += this.arr[row][col].state === STATE_MARKED ? -1 : 1;
+        this.arr[row][col].state = this.arr[row][col].state === STATE_MARKED ? STATE_HIDDEN : STATE_MARKED;
         return true;
     }
 

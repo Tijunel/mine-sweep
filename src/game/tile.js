@@ -12,6 +12,7 @@ export default class Tile extends React.Component {
             fontSize: 0,
             height: 0
         }
+        this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount = () => {
@@ -33,14 +34,19 @@ export default class Tile extends React.Component {
         });
     }
 
-    uncover = () => {
+    handleClick = () => {
         if(!this.props.started) return;
         this.props.uncoverTile(this.props.row, this.props.col);
     }
 
+    handleRightClick = (e) => {
+        e.preventDefault();
+        this.props.markTile(this.props.row, this.props.col);
+    }
+
     render = () => {
         return (
-            <div id="tile" style={{ backgroundColor: this.state.colour, height: this.state.height}} onClick={this.uncover} ref={this.tileRef}>
+            <div id="tile" style={{ backgroundColor: this.state.colour, height: this.state.height}} onClick={this.handleClick} onContextMenu={this.handleRightClick} ref={this.tileRef}>
                 <div style={{fontSize: this.state.fontSize, margin: "auto"}}>
                     {(this.state.uncovered) ? (this.state.count === "0") ? "" : this.state.count : ""}
                 </div>
