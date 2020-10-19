@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import GameEngine from '../game/engine';
 import '../styling/settings.css';
 
 export default class Settings extends React.Component {
@@ -8,28 +7,24 @@ export default class Settings extends React.Component {
         super(props);
         this.state = {
             easy: true,
-            started: false,
-            engine: GameEngine.getInstance()
+            started: false
         }
     }
 
     toggleMode = () => {
-        this.setState({
-            easy: !this.state.easy,
-            started: false
-        },
-            this.state.engine.setGameMode(!this.state.easy),
-            this.props.updateDifficulty(!this.state.easy),
-            this.props.updateStarted(!this.state.started)
+        this.setState({ easy: !this.state.easy },
+            this.props.updateDifficulty(!this.state.easy, (success) => {
+                if (success) this.setState({ started: false }, this.props.updateStarted(false));
+                else this.setState({ easy: !this.state.easy });
+            }),
         );
     }
 
     toggleStart = () => {
-        this.setState({
-            started: !this.state.started
-        },
-            this.state.engine.setGameMode(this.state.easy),
-            this.props.updateStarted(!this.state.started)
+        this.setState({ started: !this.state.started },
+            this.props.updateStarted(!this.state.started, (success) => {
+                if (!success) this.setState({ started: true });
+            })
         );
     }
 

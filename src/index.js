@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Modal } from "react-bootstrap";
+import MyModal from './navigation/modal';
+import GameEngine from './game/engine';
 import './styling/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -15,22 +16,65 @@ class App extends React.Component {
 		this.settingsRef = React.createRef();
 		this.state = {
 			easy: true,
-			started: false
+			started: false,
+			showModal: false,
+			modalInfo: {
+				title: "",
+				message: "",
+				successCallback: () => { },
+				failureCallback: () => { }
+			},
+			engine: GameEngine.getInstance()
 		}
 	}
 
-	updateDifficulty = (state) => {
-		this.setState({ easy: state });
-	}
-
-	updateStarted = (started) => {
-		this.setState({ started: started });
-	}
-
-	restartGame = (win) => {
-		if(win) {
-
+	updateDifficulty = (easy, callback) => {
+		if (this.state.started) {
+			this.showModal(false, false,
+				() => {
+					this.state.engine.setGameMode(easy);
+					this.setState({ easy: easy, started: false, showModal: false }, callback(true));
+				},
+				() => {
+					this.setState({ started: true, showModal: false }, callback(false));
+				}
+			);
 		}
+		else {
+			this.state.engine.setGameMode(easy);
+			this.setState({ easy: easy, started: false });
+		} 
+	}
+
+	updateStarted = (started, callback) => {
+		if (this.state.started) this.showModal(false, false, 
+			() => { 
+				this.state.engine.setGameMode(this.state.easy);
+				this.setState({ started: started, showModal: false }, callback(true)); 
+			}, 
+			() => {
+				this.setState({ showModal: false }, callback(false)); 
+			});
+		else this.setState({ started: started });
+	}
+
+	showModal = (finished, win, successCallback, failureCallback) => {
+		var info = {
+			title: "You have a game in progress.",
+			message: `Are you sure you want to stop? You will lose your progress.`,
+			successCallback: successCallback,
+			failureCallback: failureCallback
+		}
+		if (finished) {
+			if (win) {
+				info.title = "Congratulations!";
+				info.message = `You finished in ${win}`;
+			} else {
+				info.title = "Boom!";
+				info.message = "You hit a mine! Please try again!";
+			}
+		}
+		this.setState({ showModal: true, modalInfo: info });
 	}
 
 	render = () => {
@@ -40,9 +84,10 @@ class App extends React.Component {
 					<TopNavigation />
 					<div id="content">
 						<Settings updateDifficulty={this.updateDifficulty} updateStarted={this.updateStarted} />
-						<TileArea difficulty={this.state.easy} started={this.state.started} />
+						<TileArea easy={this.state.easy} started={this.state.started} />
 						<GameStats started={this.state.started} />
 					</div>
+					<MyModal showModal={this.state.showModal} modalInfo={this.state.modalInfo} />
 				</div>
 			</React.Fragment>
 		);

@@ -25,7 +25,7 @@ export default class TileArea extends React.Component {
     uncoverTile = (row, col) => {
         this.state.engine.uncover(row, col);
         let status = this.state.engine.getStatus();
-        if(status.done && status.exploded) {
+        if (status.done && status.exploded) {
             // Show that u f'ed up
         } else if (status.done && !status.exploded) {
             // Show player they won and regenerate
@@ -40,7 +40,7 @@ export default class TileArea extends React.Component {
 
     generateTiles = () => {
         let rendering = this.state.engine.getRendering();
-        let cols = (this.props.difficulty) ? 10 : 15;
+        let cols = (this.props.easy) ? 10 : 15;
         var tiles = [[]];
         var info = [];
         for (var i = 0; i < cols; i++) {
@@ -48,7 +48,7 @@ export default class TileArea extends React.Component {
             for (var j = 0; j < cols; j++) {
                 var colour = (((i + 10) + j) % 2 === 0) ? '#0494F5' : '#0476C2';
                 if (rendering !== undefined && !isNaN(rendering[i][j])) colour = "#FFF";
-                if(rendering !== undefined && (rendering[i][j] === "F" || rendering[i][j] === "M")) colour = "#800000";
+                if (rendering !== undefined && (rendering[i][j] === "F" || rendering[i][j] === "M")) colour = "#800000";
                 tiles[i].push(
                     <Col key={(i * 10) + j} style={{ padding: 0, margin: 0 }}>
                         <Tile
