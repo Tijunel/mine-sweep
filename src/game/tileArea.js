@@ -30,7 +30,7 @@ export default class TileArea extends React.Component {
                 var colour = (((i + 10) + j) % 2 === 0) ? '#0494F5' : '#0476C2';
                 this.tiles[i].push(
                     <Col key={(i * 10) + j} style={{ padding: 0, margin: 0 }}>
-                        <Tile row={i} col={j} colour={colour} />
+                        <Tile row={i} col={j} colour={colour} started={this.props.started}/>
                     </Col>
                 );
             }

@@ -12,12 +12,17 @@ class App extends React.Component {
 		super();
 		this.settingsRef = React.createRef();
 		this.state = {
-			easy: true
+			easy: true,
+			started: false
 		}
 	}
 
 	updateDifficulty = (state) => {
-		this.setState({ easy: !state });
+		this.setState({ easy: state });
+	}
+
+	updateStarted = (started) => {
+		this.setState({ started: started });
 	}
 
 	render = () => {
@@ -26,8 +31,8 @@ class App extends React.Component {
 				<div id='top-div'>
 					<TopNavigation/>
 					<div id="content">
-						<Settings updateDifficulty={this.updateDifficulty}/>
-						<Game difficulty={this.state.easy}/>
+						<Settings updateDifficulty={this.updateDifficulty} updateStarted={this.updateStarted}/>
+						<Game difficulty={this.state.easy} started={this.state.started}/>
 					</div>
 				</div>
 			</React.Fragment>	
