@@ -54,7 +54,8 @@ export default class GameEngine {
     }
 
     count(row, col) {
-        const c = (r, c) => (this.validCoord(r, c) && this.arr[r][c].mine ? 1 : 0);
+        const c = (r, c) =>
+            (this.validCoord(r, c) && this.arr[r][c].mine ? 1 : 0);
         let res = 0;
         for (let dr = -1; dr <= 1; dr++)
             for (let dc = -1; dc <= 1; dc++)
@@ -64,10 +65,12 @@ export default class GameEngine {
 
     sprinkleMines(row, col) {
         let allowed = [];
-        for (let r = 0; r < this.nrows; r++) 
-            for (let c = 0; c < this.ncols; c++) 
+        for (let r = 0; r < this.nrows; r++) {
+            for (let c = 0; c < this.ncols; c++) {
                 if (Math.abs(row - r) > 2 || Math.abs(col - c) > 2)
                     allowed.push([r, c]);
+            }
+        }
         this.nmines = Math.min(this.nmines, allowed.length);
         for (let i = 0; i < this.nmines; i++) {
             let j = rndInt(i, allowed.length - 1);
@@ -77,25 +80,29 @@ export default class GameEngine {
         }
         for (let r = 0; r < this.nrows; r++) {
             for (let c = 0; c < this.ncols; c++) {
-                if (this.arr[r][c].state === STATE_MARKED) this.arr[r][c].state = STATE_HIDDEN;
+                if (this.arr[r][c].state == STATE_MARKED)
+                    this.arr[r][c].state = STATE_HIDDEN;
                 this.arr[r][c].count = this.count(r, c);
             }
         }
-        let mines = []; 
+        let mines = []; let counts = [];
         for (let row = 0; row < this.nrows; row++) {
             let s = "";
-            for (let col = 0; col < this.ncols; col++) 
+            for (let col = 0; col < this.ncols; col++) {
                 s += this.arr[row][col].mine ? "B" : ".";
+            }
             s += "  |  ";
-            for (let col = 0; col < this.ncols; col++) 
+            for (let col = 0; col < this.ncols; col++) {
                 s += this.arr[row][col].count.toString();
+            }
             mines[row] = s;
         }
     }
 
     uncover(row, col) {
         if (!this.validCoord(row, col)) return false;
-        if (this.nuncovered === 0) this.sprinkleMines(row, col);
+        if (this.nuncovered === 0)
+            this.sprinkleMines(row, col);
         if (this.arr[row][col].state !== STATE_HIDDEN) return false;
         const ff = (r, c) => {
             if (!this.validCoord(r, c)) return;
@@ -108,7 +115,9 @@ export default class GameEngine {
             ff(r + 1, c - 1); ff(r + 1, c); ff(r + 1, c + 1);
         };
         ff(row, col);
-        if (this.arr[row][col].mine) this.exploded = true;
+        if (this.arr[row][col].mine) {
+            this.exploded = true;
+        }
         return true;
     }
 
@@ -138,7 +147,8 @@ export default class GameEngine {
     }
 
     getStatus() {
-        let done = this.exploded || this.nuncovered === this.nrows * this.ncols - this.nmines;
+        let done = this.exploded ||
+            this.nuncovered === this.nrows * this.ncols - this.nmines;
         return {
             done: done,
             exploded: this.exploded,
@@ -153,14 +163,23 @@ export default class GameEngine {
     unmarkAll() {
         let arr = this.getRendering();
         for (let row = 0; row < this.nrows; row++) {
-            for(let col = 0; col < this.ncols; col++) {
-                if(arr[row][col] === "F") this.mark(row, col);
+            for (let col = 0; col < this.ncols; col++) {
+                if (arr[row][col] === "F") this.mark(row, col);
+            }
+        }
+    }
+
+    markBombs() {
+        let arr = this.getRendering();
+        for (let row = 0; row < this.nrows; row++) {
+            for (let col = 0; col < this.ncols; col++) {
+                if (arr[row][col] === "H") this.mark(row, col);
             }
         }
     }
 
     getTileStatus(row, col) {
-        if(this.arr[row][col].mine) return -1;
+        if (this.arr[row][col].mine) return -1;
         return this.arr[row][col].count;
     }
 }

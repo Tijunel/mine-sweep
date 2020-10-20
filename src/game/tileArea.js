@@ -36,7 +36,10 @@ export default class TileArea extends React.Component {
             this.state.engine.unmarkAll();
         } 
         if (status.done && status.exploded) this.props.showModal(true, false, restart, restart);
-        else if (status.done && !status.exploded) this.props.showModal(true, true, restart, restart);
+        else if (status.done && !status.exploded) {
+            this.props.showModal(true, true, restart, restart);
+            this.state.engine.markBombs();
+        } 
     }
 
     markTile = (row, col) => {
@@ -55,8 +58,9 @@ export default class TileArea extends React.Component {
             tiles[i] = [];
             for (var j = 0; j < cols; j++) {
                 var colour = (((i + 10) + j) % 2 === 0) ? '#0494F5' : '#0476C2';
-                if (rendering !== undefined && !isNaN(rendering[i][j])) colour = "#FFF";
-                if (rendering !== undefined && (rendering[i][j] === "F" || rendering[i][j] === "M")) colour = "#800000";
+                console.log(rendering)
+                if (!isNaN(rendering[i][j])) colour = "#FFF";
+                if ((rendering[i][j] === "F" || rendering[i][j] === "M")) colour = "#800000";
                 tiles[i].push(
                     <Col key={(i * 10) + j} style={{ padding: 0, margin: 0 }}>
                         <Tile
