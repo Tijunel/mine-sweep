@@ -21,6 +21,7 @@ export default class GameStats extends React.Component {
         } 
     }
 
+    // Timer Functions
     startTimer = () => {
         this.timer = setInterval(() => {
             this.setState({ time: this.state.time + 1 });
@@ -39,6 +40,15 @@ export default class GameStats extends React.Component {
 
     getTime = () => {
         return this.state.time;
+    }
+
+    // Mine Functions
+    incrementMines = () => {
+        this.setState({mines: this.state.mines + 1});
+    }
+
+    decrementMines = () => {
+        this.setState({mines: this.state.mines - 1});
     }
 
     render = () => {

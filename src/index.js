@@ -91,9 +91,22 @@ class App extends React.Component {
 				<div id='top-div'>
 					<TopNavigation />
 					<div id="content">
-						<Settings updateDifficulty={this.updateDifficulty} updateStarted={this.updateStarted} ref={this.settingsRef} />
-						<TileArea easy={this.state.easy} started={this.state.started} showModal={this.showModal} reset={this.reset} gameStats={this.gameStatsRef} />
-						<GameStats started={this.state.started} ref={this.gameStatsRef} />
+						<Settings
+							updateDifficulty={this.updateDifficulty}
+							updateStarted={this.updateStarted}
+							ref={this.settingsRef}
+						/>
+						<TileArea
+							easy={this.state.easy}
+							started={this.state.started}
+							showModal={this.showModal}
+							reset={this.reset}
+							gameStats={this.gameStatsRef}
+						/>
+						<GameStats
+							started={this.state.started}
+							ref={this.gameStatsRef}
+						/>
 					</div>
 					<MyModal showModal={this.state.showModal} modalInfo={this.state.modalInfo} />
 				</div>

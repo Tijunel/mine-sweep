@@ -150,6 +150,15 @@ export default class GameEngine {
         }
     }
 
+    unmark() {
+        let arr = this.getRendering();
+        for (let row = 0; row < this.nrows; row++) {
+            for(let col = 0; col < this.ncols; col++) {
+                if(arr[row][col] === "F") this.mark(row, col);
+            }
+        }
+    }
+
     getTileStatus(row, col) {
         if(this.arr[row][col].mine) return -1;
         return this.arr[row][col].count;

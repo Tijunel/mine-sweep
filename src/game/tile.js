@@ -61,7 +61,7 @@ export default class Tile extends React.Component {
 
     handleTouchEnd = () => {
         if (!this.props.started && this.state.touchTime > 0) return;
-        if (this.state.touchTime > 990) this.props.markTile(this.props.row, this.props.col);
+        if (this.state.touchTime > 660) this.props.markTile(this.props.row, this.props.col); // 1 Second is too long!!! 0.67 seconds is standard
         clearInterval(this.timer);
         this.setState({ touchTime: 0 });
     }

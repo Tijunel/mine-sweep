@@ -31,13 +31,18 @@ export default class TileArea extends React.Component {
     handleGameEnd = () => {
         let status = this.state.engine.getStatus();
         let restart = () => { this.state.engine.setGameMode(this.props.easy); this.props.reset(); }
-        if(status.done) this.props.gameStats.current.pauseTimer();
+        if(status.done) {
+            this.props.gameStats.current.pauseTimer();
+            this.state.engine.unmark();
+        } 
         if (status.done && status.exploded) this.props.showModal(true, false, restart, restart);
         else if (status.done && !status.exploded) this.props.showModal(true, true, restart, restart);
     }
 
     markTile = (row, col) => {
         this.state.engine.mark(row, col);
+        if(this.state.engine.getRendering()[row][col] === "F") this.props.gameStats.current.decrementMines();
+        else this.props.gameStats.current.incrementMines();
         this.generateTiles();
     }
 
