@@ -33,7 +33,7 @@ export default class TileArea extends React.Component {
         let restart = () => { this.state.engine.setGameMode(this.props.easy); this.props.reset(); }
         if(status.done) {
             this.props.gameStats.current.pauseTimer();
-            this.state.engine.unmark();
+            this.state.engine.unmarkAll();
         } 
         if (status.done && status.exploded) this.props.showModal(true, false, restart, restart);
         else if (status.done && !status.exploded) this.props.showModal(true, true, restart, restart);

@@ -150,7 +150,7 @@ export default class GameEngine {
         }
     }
 
-    unmark() {
+    unmarkAll() {
         let arr = this.getRendering();
         for (let row = 0; row < this.nrows; row++) {
             for(let col = 0; col < this.ncols; col++) {
