@@ -17,7 +17,7 @@ export default class GameStats extends React.Component {
     componentDidUpdate = (prevProps) => {
         if(prevProps.started !== this.props.started) {
             if(this.props.started) this.startTimer();
-            else this.stopTimer();
+            else this.resetTimer();
         } 
     }
 
@@ -28,9 +28,17 @@ export default class GameStats extends React.Component {
         this.setState({ mines: this.state.engine.getStatus().nmines })
     }
 
-    stopTimer = () => {
+    resetTimer = () => {
         clearInterval(this.timer);
         this.setState({ time: 0, mines: 0 });
+    }
+
+    pauseTimer = () => {
+        clearInterval(this.timer);
+    }
+
+    getTime = () => {
+        return this.state.time;
     }
 
     render = () => {

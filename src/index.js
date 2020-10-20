@@ -14,6 +14,7 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.settingsRef = React.createRef();
+		this.gameStatsRef = React.createRef();
 		this.state = {
 			easy: true,
 			started: false,
@@ -21,6 +22,8 @@ class App extends React.Component {
 			modalInfo: {
 				title: "",
 				message: "",
+				cancelOption: true,
+				primaryButtonTitle: "Continue",
 				successCallback: () => { },
 				failureCallback: () => { }
 			},
@@ -29,32 +32,29 @@ class App extends React.Component {
 	}
 
 	updateDifficulty = (easy, callback) => {
-		if (this.state.started) {
+		if (this.state.started)
 			this.showModal(false, false,
 				() => {
 					this.state.engine.setGameMode(easy);
 					this.setState({ easy: easy, started: false, showModal: false }, callback(true));
 				},
-				() => {
-					this.setState({ started: true, showModal: false }, callback(false));
-				}
+				() => { this.setState({ started: true, showModal: false }, callback(false)); }
 			);
-		}
 		else {
 			this.state.engine.setGameMode(easy);
 			this.setState({ easy: easy, started: false });
-		} 
+		}
 	}
 
 	updateStarted = (started, callback) => {
-		if (this.state.started) this.showModal(false, false, 
-			() => { 
-				this.state.engine.setGameMode(this.state.easy);
-				this.setState({ started: started, showModal: false }, callback(true)); 
-			}, 
-			() => {
-				this.setState({ showModal: false }, callback(false)); 
-			});
+		if (this.state.started)
+			this.showModal(false, false,
+				() => {
+					this.state.engine.setGameMode(this.state.easy);
+					this.setState({ started: started, showModal: false }, callback(true));
+				},
+				() => { this.setState({ showModal: false }, callback(false)); }
+			);
 		else this.setState({ started: started });
 	}
 
@@ -62,19 +62,27 @@ class App extends React.Component {
 		var info = {
 			title: "You have a game in progress.",
 			message: `Are you sure you want to stop? You will lose your progress.`,
+			cancelOption: true,
+			primaryButtonTitle: "Continue",
 			successCallback: successCallback,
 			failureCallback: failureCallback
 		}
 		if (finished) {
+			info.cancelOption = false;
+			info.primaryButtonTitle = "Try Again";
 			if (win) {
-				info.title = "Congratulations!";
-				info.message = `You finished in ${win}`;
+				info.title = "Congratulations! You win!";
+				info.message = `You finished in ${this.gameStatsRef.current.getTime()} seconds.`;
 			} else {
 				info.title = "Boom!";
-				info.message = "You hit a mine! Please try again!";
+				info.message = "You hit a mine! Please try again.";
 			}
 		}
 		this.setState({ showModal: true, modalInfo: info });
+	}
+
+	reset = () => {
+		this.setState({ showModal: false, started: false }, this.settingsRef.current.toggleStart());
 	}
 
 	render = () => {
@@ -83,9 +91,9 @@ class App extends React.Component {
 				<div id='top-div'>
 					<TopNavigation />
 					<div id="content">
-						<Settings updateDifficulty={this.updateDifficulty} updateStarted={this.updateStarted} />
-						<TileArea easy={this.state.easy} started={this.state.started} />
-						<GameStats started={this.state.started} />
+						<Settings updateDifficulty={this.updateDifficulty} updateStarted={this.updateStarted} ref={this.settingsRef} />
+						<TileArea easy={this.state.easy} started={this.state.started} showModal={this.showModal} reset={this.reset} gameStats={this.gameStatsRef} />
+						<GameStats started={this.state.started} ref={this.gameStatsRef} />
 					</div>
 					<MyModal showModal={this.state.showModal} modalInfo={this.state.modalInfo} />
 				</div>

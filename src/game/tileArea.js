@@ -24,13 +24,16 @@ export default class TileArea extends React.Component {
 
     uncoverTile = (row, col) => {
         this.state.engine.uncover(row, col);
-        let status = this.state.engine.getStatus();
-        if (status.done && status.exploded) {
-            // Show that u f'ed up
-        } else if (status.done && !status.exploded) {
-            // Show player they won and regenerate
-        }
+        this.handleGameEnd();
         this.generateTiles();
+    }
+
+    handleGameEnd = () => {
+        let status = this.state.engine.getStatus();
+        let restart = () => { this.state.engine.setGameMode(this.props.easy); this.props.reset(); }
+        if(status.done) this.props.gameStats.current.pauseTimer();
+        if (status.done && status.exploded) this.props.showModal(true, false, restart, restart);
+        else if (status.done && !status.exploded) this.props.showModal(true, true, restart, restart);
     }
 
     markTile = (row, col) => {
