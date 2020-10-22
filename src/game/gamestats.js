@@ -9,7 +9,7 @@ export default class GameStats extends React.Component {
         this.state = {
             timerOn: false,
             time: 0,
-            mines: 0,
+            mines: 10,
             engine: GameEngine.getInstance()
         }
     }
@@ -18,7 +18,9 @@ export default class GameStats extends React.Component {
         if(prevProps.started !== this.props.started) {
             if(this.props.started) this.startTimer();
             else this.resetTimer();
-        } 
+        } else if(prevProps.easy !== this.props.easy) {
+            this.setState({ mines: this.state.engine.getStatus().nmines })
+        }
     }
 
     // Timer Functions
@@ -26,12 +28,11 @@ export default class GameStats extends React.Component {
         this.timer = setInterval(() => {
             this.setState({ time: this.state.time + 1 });
         }, 1000);
-        this.setState({ mines: this.state.engine.getStatus().nmines })
     }
 
     resetTimer = () => {
         clearInterval(this.timer);
-        this.setState({ time: 0, mines: 0 });
+        this.setState({ time: 0, mines: this.state.engine.getStatus().nmines });
     }
 
     pauseTimer = () => {

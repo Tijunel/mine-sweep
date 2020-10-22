@@ -47,17 +47,6 @@ export default class Settings extends React.Component {
                         </Row>
                     </Container>
                 </div>
-                <div id="start">
-                    <Container>
-                        <Row>
-                            <Col>
-                                <Button onClick={this.toggleStart}>
-                                    <div><b>{this.state.started ? "Stop" : "Start"}</b></div>
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
             </div>
         )
     }

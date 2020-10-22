@@ -102,8 +102,10 @@ class App extends React.Component {
 							showModal={this.showModal}
 							reset={this.reset}
 							gameStats={this.gameStatsRef}
+							settings={this.settingsRef}
 						/>
 						<GameStats
+							easy={this.state.easy}
 							started={this.state.started}
 							ref={this.gameStatsRef}
 						/>

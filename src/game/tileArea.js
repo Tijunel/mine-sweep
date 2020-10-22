@@ -71,6 +71,7 @@ export default class TileArea extends React.Component {
                             uncovered={rendering[i][j] !== "H" && rendering[i][j] !== "F"}
                             uncoverTile={this.uncoverTile}
                             markTile={this.markTile}
+                            startOnClick={this.startOnClick}
                         />
                     </Col>
                 );
@@ -78,6 +79,10 @@ export default class TileArea extends React.Component {
         }
         for (i = 0; i < cols; i++) info.push(<Row key={(i * 10)} style={{ margin: 'auto' }}>{tiles[i]}</Row>);
         this.setState({ tiles: tiles, info: info });
+    }
+
+    startOnClick = () => {
+        this.props.settings.current.toggleStart();
     }
 
     render = () => {
