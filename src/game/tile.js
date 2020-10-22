@@ -50,7 +50,7 @@ export default class Tile extends React.Component {
 
     handleRightClick = (e) => {
         e.preventDefault();
-        if (!this.props.started) return;
+        if (!this.props.started || (this.state.count !== "H" && this.state.count !== "F")) return;
         if (this.state.touchTime !== 0) return;
         this.props.markTile(this.props.row, this.props.col);
     }
@@ -59,7 +59,7 @@ export default class Tile extends React.Component {
         if (!this.props.started && this.state.touchTime === 0) return;
         this.timer = setInterval(() => {
             this.setState({ touchTime: this.state.touchTime + 10 });
-            if (this.state.touchTime + 10 > 660 && !this.state.marked) { // One second is too long! 0.67 seconds is standard
+            if ((this.state.touchTime + 10 > 660) && (!this.state.marked && (this.state.count === "H" || this.state.count === "F"))) { // One second is too long! 0.67 seconds is standard
                 this.props.markTile(this.props.row, this.props.col);
                 this.setState({ marked: true });
             }

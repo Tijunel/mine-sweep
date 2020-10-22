@@ -7,16 +7,23 @@ export default class Settings extends React.Component {
         super(props);
         this.state = {
             easy: true,
-            started: false
+            started: false,
+            showEnd: false
+        }
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.ended !== this.props.ended) {
+            if (this.props.ended) this.setState({ showEnd: true });
         }
     }
 
     toggleMode = () => {
         this.setState({ easy: !this.state.easy },
             this.props.updateDifficulty(!this.state.easy, (success) => {
-                if (success) this.setState({ started: false }, this.props.updateStarted(false));
+                if (success) this.setState({ started: false, showEnd: false }, this.props.updateStarted(false));
                 else this.setState({ easy: !this.state.easy });
-            }),
+            })
         );
     }
 
@@ -42,6 +49,17 @@ export default class Settings extends React.Component {
                             <Col>
                                 <Button disabled={!this.state.easy} onClick={this.toggleMode}>
                                     <div><b>Hard</b></div>
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
+                <div id="start" style={{ display: (this.state.showEnd) ? "" : "none" }}>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <Button onClick={() => { this.props.restart(); this.setState({ showEnd: false }) }}>
+                                    <div><b>{this.props.endMessage}! Click me to restart!</b></div>
                                 </Button>
                             </Col>
                         </Row>

@@ -19,14 +19,9 @@ class App extends React.Component {
 			easy: true,
 			started: false,
 			showModal: false,
-			modalInfo: {
-				title: "",
-				message: "",
-				cancelOption: true,
-				primaryButtonTitle: "Continue",
-				successCallback: () => { },
-				failureCallback: () => { }
-			},
+			showEnd: false,
+			endMessage: "Boom",
+			modalInfo: {},
 			engine: GameEngine.getInstance()
 		}
 	}
@@ -36,13 +31,15 @@ class App extends React.Component {
 			this.showModal(false, false,
 				() => {
 					this.state.engine.setGameMode(easy);
+					this.gameStatsRef.current.reset();
 					this.setState({ easy: easy, started: false, showModal: false }, callback(true));
 				},
 				() => { this.setState({ started: true, showModal: false }, callback(false)); }
 			);
 		else {
 			this.state.engine.setGameMode(easy);
-			this.setState({ easy: easy, started: false });
+			this.gameStatsRef.current.reset();
+			this.setState({ easy: easy, started: false }, callback(true));
 		}
 	}
 
@@ -55,7 +52,7 @@ class App extends React.Component {
 				},
 				() => { this.setState({ showModal: false }, callback(false)); }
 			);
-		else this.setState({ started: started });
+		else this.setState({ started: started, showEnd: false });
 	}
 
 	showModal = (finished, win, successCallback, failureCallback) => {
@@ -67,21 +64,18 @@ class App extends React.Component {
 			successCallback: successCallback,
 			failureCallback: failureCallback
 		}
-		if (finished) {
-			info.cancelOption = false;
-			info.primaryButtonTitle = "Try Again";
-			if (win) {
-				info.title = "Congratulations! You win!";
-				info.message = `You finished in ${this.gameStatsRef.current.getTime()} seconds.`;
-			} else {
-				info.title = "Boom!";
-				info.message = "You hit a mine! Please try again.";
-			}
-		}
 		this.setState({ showModal: true, modalInfo: info });
 	}
 
-	reset = () => {
+	showEnd = (win) => {
+		var endMessage = "Boom"
+		if (win) endMessage = `You won in ${this.gameStatsRef.current.getTime()} seconds`;
+		this.setState({ showEnd: true, endMessage: endMessage, started: false });
+	}
+
+	restart = () => {
+		this.gameStatsRef.current.reset();
+		this.state.engine.setGameMode(this.state.easy);
 		this.setState({ showModal: false, started: false }, this.settingsRef.current.toggleStart());
 	}
 
@@ -92,15 +86,18 @@ class App extends React.Component {
 					<TopNavigation />
 					<div id="content">
 						<Settings
+							ended={this.state.showEnd}
+							endMessage={this.state.endMessage}
 							updateDifficulty={this.updateDifficulty}
 							updateStarted={this.updateStarted}
+							restart={this.restart}
 							ref={this.settingsRef}
 						/>
 						<TileArea
 							easy={this.state.easy}
 							started={this.state.started}
-							showModal={this.showModal}
-							reset={this.reset}
+							showEnd={this.showEnd}
+							restart={this.restart}
 							gameStats={this.gameStatsRef}
 							settings={this.settingsRef}
 						/>

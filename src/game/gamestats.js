@@ -15,10 +15,11 @@ export default class GameStats extends React.Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if(prevProps.started !== this.props.started) {
-            if(this.props.started) this.startTimer();
-            else this.resetTimer();
-        } else if(prevProps.easy !== this.props.easy) {
+        if (prevProps.started !== this.props.started) {
+            if (this.props.started) {
+                this.startTimer();
+            }
+        } else if (prevProps.easy !== this.props.easy) {
             this.setState({ mines: this.state.engine.getStatus().nmines })
         }
     }
@@ -30,26 +31,28 @@ export default class GameStats extends React.Component {
         }, 1000);
     }
 
-    resetTimer = () => {
-        clearInterval(this.timer);
-        this.setState({ time: 0, mines: this.state.engine.getStatus().nmines });
-    }
-
-    pauseTimer = () => {
-        clearInterval(this.timer);
-    }
-
     getTime = () => {
         return this.state.time;
     }
 
     // Mine Functions
     incrementMines = () => {
-        this.setState({mines: this.state.mines + 1});
+        this.setState({ mines: this.state.mines + 1 });
     }
 
     decrementMines = () => {
-        this.setState({mines: this.state.mines - 1});
+        this.setState({ mines: this.state.mines - 1 });
+    }
+
+    // External Helpers
+    pause = () => {
+        clearInterval(this.timer);
+        this.setState({ mines: this.state.engine.getStatus().nmines });
+    }
+
+    reset = () => {
+        clearInterval(this.timer);
+        this.setState({ time: 0, mines: this.state.engine.getStatus().nmines });
     }
 
     render = () => {
