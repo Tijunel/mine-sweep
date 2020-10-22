@@ -67,7 +67,6 @@ export default class TileArea extends React.Component {
                             colour={colour}
                             started={this.props.started}
                             count={rendering[i][j]}
-                            uncovered={rendering[i][j] !== "H" && rendering[i][j] !== "F"}
                             uncoverTile={this.uncoverTile}
                             markTile={this.markTile}
                             startOnClick={this.startOnClick}

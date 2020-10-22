@@ -16,8 +16,8 @@ class App extends React.Component {
 		this.settingsRef = React.createRef();
 		this.gameStatsRef = React.createRef();
 		this.state = {
-			easy: true,
-			started: false,
+			easy: true, // Remove dup
+			started: false, // Remove dup
 			showModal: false,
 			showEnd: false,
 			endMessage: "Boom",
